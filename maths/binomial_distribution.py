@@ -4,7 +4,8 @@ https://en.wikipedia.org/wiki/Binomial_distribution"""
 from decimal import Decimal, getcontext
 from math import factorial
 
-getcontext().prec = 20 # Using decimal library for float precision
+getcontext().prec = 20  # Using decimal library for float precision
+
 
 def binomial_distribution(successes: int, trials: int, prob: float) -> float:
     """
