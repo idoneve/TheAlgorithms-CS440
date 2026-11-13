@@ -1,6 +1,7 @@
 """For more information about the Binomial Distribution -
 https://en.wikipedia.org/wiki/Binomial_distribution"""
 
+from decimal import MAX_EMAX, MIN_EMIN, Context, Decimal, localcontext
 from math import factorial
 
 
@@ -25,11 +26,17 @@ def binomial_distribution(successes: int, trials: int, prob: float) -> float:
         raise ValueError("the function is defined for non-negative integers")
     if not 0 < prob < 1:
         raise ValueError("prob has to be in range of 1 - 0")
-    probability = (prob**successes) * ((1 - prob) ** (trials - successes))
     # Calculate the binomial coefficient: n! / k!(n-k)!
-    coefficient = float(factorial(trials))
-    coefficient /= factorial(successes) * factorial(trials - successes)
-    return probability * coefficient
+    coefficient = factorial(trials) // (
+        factorial(successes) * factorial(trials - successes)
+    )
+    with localcontext(Context(prec=50, Emin=MIN_EMIN, Emax=MAX_EMAX)):
+        probability = Decimal(prob)
+        return float(
+            coefficient
+            * probability**successes
+            * (1 - probability) ** (trials - successes)
+        )
 
 
 if __name__ == "__main__":
